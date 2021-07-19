@@ -20,7 +20,6 @@ class Product {
     static read() {
         let items = {...localStorage};
         let product = '';
-        let index = 1;
         for (let item in items) {
             item = JSON.parse(localStorage.getItem(item));
             product += `<div class="card" style="width: 18rem;">
@@ -32,10 +31,10 @@ class Product {
                             <div class="row" class="buttons">
                                 <div class="col-6">
                                     <button type="button" class="btn btn-custom cart">Add to cart</button><br><br>
-                                    <button type="button" class="btn btn-custom update">Update product</button>
+                                    <button type="button" class="btn btn-custom update" data-bs-toggle="modal" data-bs-target="#updateModal" name="${item.name}">Update product</button>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="btn btn-custom delete"><i class="bi bi-trash-fill"></i></button>
+                                    <button type="button" class="btn btn-custom delete" name="${item.name}"><i class="bi bi-trash-fill"></i></button>
                                 </div>
                             </div>
   </div>
@@ -43,8 +42,25 @@ class Product {
         }
         document.getElementById('products').innerHTML = product;
     }
+    static delete(name) {
+        localStorage.removeItem(name);
+        location.reload();
+    }
 }
 Product.read();
 
+$(document).on('click', '.delete', function() {
+    Product.delete(this.name);
+});
+$(document).on('click', '#update', function(e) {
+    const formData = new FormData();
+    let product = JSON.parse(localStorage.getItem(this.name));
+    console.log(this.name);
+    // product.name = formData.get('name');
+    // product.price = formData.get('price');
+    // product.image = formData.get('image');
+    // product.description = formData.get('description');
+    // localStorage.setItem(product.name, JSON.stringify(product));
+})
 
 
