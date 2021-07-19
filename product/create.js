@@ -23,14 +23,23 @@ class Product {
         let index = 1;
         for (let item in items) {
             item = JSON.parse(localStorage.getItem(item));
-            product += `<div class="col-4">
-                            <img src="images/${item.image}" alt="chocolate" class="img-responsive product img-fluid">
-                            <p class="title">${item.name}</p>
+            product += `<div class="card" style="width: 18rem;">
+   <img src="images/${item.image}" alt="chocolate" class="img-responsive product img-fluid">
+  <div class="card-body">
+    <p class="title">${item.name}</p>
                             <p class="description">${item.description}</p>
                             <p class="price">${item.price} $</p>
-                            <button type="button" class="btn btn-custom">Add to cart</button>
-                        </div>`;
-            if (index % 3 === 0) product += `<br>`;
+                            <div class="row" class="buttons">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-custom cart">Add to cart</button><br><br>
+                                    <button type="button" class="btn btn-custom update">Update product</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-custom delete"><i class="bi bi-trash-fill"></i></button>
+                                </div>
+                            </div>
+  </div>
+</div>`;
         }
         document.getElementById('products').innerHTML = product;
     }

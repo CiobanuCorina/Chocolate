@@ -78,3 +78,6 @@ h1 {
     justify-content: center;
     text-align: center;
 }
+.card {
+    margin: 10px;
+}
