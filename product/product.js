@@ -52,15 +52,20 @@ Product.read();
 $(document).on('click', '.delete', function() {
     Product.delete(this.name);
 });
-$(document).on('click', '#update', function(e) {
-    const formData = new FormData();
+$(document).on('click', '.update', function() {
     let product = JSON.parse(localStorage.getItem(this.name));
-    console.log(this.name);
-    // product.name = formData.get('name');
-    // product.price = formData.get('price');
-    // product.image = formData.get('image');
-    // product.description = formData.get('description');
-    // localStorage.setItem(product.name, JSON.stringify(product));
+    document.getElementById('name').value = product.name;
+    document.getElementById('price').value = product.price;
+    document.getElementById('description').value = product.description;
+    document.getElementById('image').value = product.image;
+    $(document).on('click', '#update', function(){
+        product.name = document.getElementById('name').value;
+        product.price = document.getElementById('price').value;
+        product.description = document.getElementById('description').value;
+        product.image = document.getElementById('image').value;
+        localStorage.setItem(product.name, JSON.stringify(product));
+        location.reload();
+    })
 })
 
 
