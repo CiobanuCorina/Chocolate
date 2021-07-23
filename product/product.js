@@ -1,3 +1,33 @@
+const constants = {
+    CART_STORAGE_KEY: 'cart',
+    PRODUCT_STORAGE_KEY: 'product'
+};
+
+const Utils = {
+    formatPrice(price) {
+        return price.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD"
+        });
+    }
+}
+
+const Storage = {
+    getItem(key) {
+        try {
+            return JSON.parse(window.localStorage.getItem(key));
+        } catch (e) {
+            return null;
+        }
+    },
+    setItem(key, value) {
+        const strValue = JSON.stringify(value);
+        window.localStorage.setItem(key, strValue);
+    },
+    removeItem(key) {
+        window.localStorage.removeItem(key);
+    }
+}
 let form = document.querySelector('form');
 
 if (form) {
@@ -25,22 +55,22 @@ class Product {
             if (item === 'cart') continue;
             item = JSON.parse(localStorage.getItem(item));
             product += `<div class="card" style="width: 18rem;">
-   <img src="images/${item.image}" alt="chocolate" class="img-responsive product img-fluid">
-  <div class="card-body">
-    <p class="title">${item.name}</p>
-                            <p class="description">${item.description}</p>
-                            <p class="price">${item.price} $</p>
-                            <div class="row" class="buttons">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-custom cart" name="${item.name}">Add to cart</button><br><br>
-                                    <button type="button" class="btn btn-custom update" data-bs-toggle="modal" data-bs-target="#updateModal" name="${item.name}">Update product</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-custom delete" name="${item.name}"><i class="bi bi-trash-fill"></i></button>
+                            <img src="images/${item.image}" alt="chocolate" class="img-responsive product img-fluid">
+                            <div class="card-body">
+                                <p class="title">${item.name}</p>
+                                <p class="description">${item.description}</p>
+                                <p class="price">${item.price} $</p>
+                                <div class="row" class="buttons">
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-custom cart" name="${item.name}">Add to cart</button><br><br>
+                                        <button type="button" class="btn btn-custom update" data-bs-toggle="modal" data-bs-target="#updateModal" name="${item.name}">Update product</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-custom delete" name="${item.name}"><i class="bi bi-trash-fill"></i></button>
+                                    </div>
                                 </div>
                             </div>
-  </div>
-</div>`;
+                        </div>`;
         }
         document.getElementById('products').innerHTML = product;
     }
