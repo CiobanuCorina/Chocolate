@@ -97,29 +97,53 @@ class Cart {
     }
 
     addItem(product) {
+        if(this.items.find(element => element.name === product.name)){
+        }
         this.items = [...this.items, product];
         this.save();
     }
 
     viewCart() {
-        let cartBody = "";
+        let cartBody = document.getElementById('cartBody');
         this.items.forEach(function (element) {
-            console.log(element);
-            cartBody += `<div class="card mb-3" style="max-width: 540px;">
+            cartBody.innerHTML += `<div class="card mb-3" style="max-width: 540px;">
                             <div class="row g-0">
                                 <div class="col-md-4">
                                     <img src="images/${element.image}" class="img-fluid rounded-start" alt="chocolate">
                                 </div>
                              <div class="col-md-8">
+                             <div class="col-md-6"
                                 <div class="card-body">
+                                <div class="row g-0">
+                                <div class="col-md-8">
                                 <h5 class="card-title">${element.name}</h5>
                                 <p class="card-text">Price (per unit): ${element.price}$</p>
+                                </div>
+                                <div class="col-md-4" style="float: right;">
+                                <button type="button" class="btn btn-custom deleteCart" name="${element.name}">X</button>
+                                </div>
+                                </div>
+                                </div>
                              </div>
                             </div>
                             </div>
                             </div>`
-            document.getElementById('cartBody').innerHTML = cartBody;
+
+            document.querySelector('.deleteCart').addEventListener('click', () => {
+                console.log('Delete item from cart');
+                // let cart = new Cart();
+                // cart.deleteItem(this.name);
+                // cart.viewCart();
+            })
         })
+
+    }
+
+    deleteItem(productName) {
+        console.log(this.items);
+        // this.items = this.items.filter((p) => p.name === productName);
+        console.log(this.items);
+        // this.save();
     }
 }
 
@@ -137,31 +161,33 @@ document.getElementById('cart').addEventListener('click', function () {
     }
 })
 
-$(document).on('click', '.cart', function () {
-    let jsonProduct = JSON.parse(localStorage.getItem(this.name));
-    let product = new Product(jsonProduct.name, jsonProduct.price, jsonProduct.image, jsonProduct.description, jsonProduct.amount);
-    let cart = new Cart();
-    cart.addItem(product);
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-})
 
-$(document).on('click', '.update', function () {
-    let product = JSON.parse(localStorage.getItem(this.name));
-    document.getElementById('name').value = product.name;
-    document.getElementById('price').value = product.price;
-    document.getElementById('description').value = product.description;
-    document.getElementById('image').value = product.image;
-    document.getElementById('amount').value = product.amount;
-    $(document).on('click', '#update', function () {
-        product.name = document.getElementById('name').value;
-        product.price = document.getElementById('price').value;
-        product.description = document.getElementById('description').value;
-        product.image = document.getElementById('image').value;
-        product.amount = document.getElementById('amount').value;
-        localStorage.setItem(product.name, JSON.stringify(product));
-        location.reload();
-    })
-})
+// $(document).on('click', '.cart', function () {
+//     let jsonProduct = JSON.parse(localStorage.getItem(this.name));
+//     let product = new Product(jsonProduct.name, jsonProduct.price, jsonProduct.image, jsonProduct.description, jsonProduct.amount);
+//     let cart = new Cart();
+//     cart.addItem(product);
+//
+//     localStorage.setItem('cart', JSON.stringify(cart));
+// })
+//
+// $(document).on('click', '.update', function () {
+//     let product = JSON.parse(localStorage.getItem(this.name));
+//     document.getElementById('name').value = product.name;
+//     document.getElementById('price').value = product.price;
+//     document.getElementById('description').value = product.description;
+//     document.getElementById('image').value = product.image;
+//     document.getElementById('amount').value = product.amount;
+//     $(document).on('click', '#update', function () {
+//         product.name = document.getElementById('name').value;
+//         product.price = document.getElementById('price').value;
+//         product.description = document.getElementById('description').value;
+//         product.image = document.getElementById('image').value;
+//         product.amount = document.getElementById('amount').value;
+//         localStorage.setItem(product.name, JSON.stringify(product));
+//         location.reload();
+//     })
+// })
 
 
