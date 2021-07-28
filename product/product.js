@@ -73,6 +73,38 @@ class Product {
                         </div>`;
         }
         document.getElementById('products').innerHTML = product;
+        const updateButtons = document.querySelectorAll('.update');
+        updateButtons.forEach((element) => {
+            element.addEventListener('click', () => {
+                let product = JSON.parse(localStorage.getItem(element.name));
+                document.getElementById('name').value = product.name;
+                document.getElementById('price').value = product.price;
+                document.getElementById('description').value = product.description;
+                document.getElementById('image').value = product.image;
+                document.getElementById('amount').value = product.amount;
+                document.getElementById('update').addEventListener('click', () => {
+                    product.name = document.getElementById('name').value;
+                    product.price = document.getElementById('price').value;
+                    product.description = document.getElementById('description').value;
+                    product.image = document.getElementById('image').value;
+                    product.amount = document.getElementById('amount').value;
+                    localStorage.setItem(product.name, JSON.stringify(product));
+                    location.reload();
+                })
+            })
+        })
+        const addToCart = document.querySelectorAll('.cart');
+        addToCart.forEach((element) => {
+            element.addEventListener('click', () => {
+                let jsonProduct = JSON.parse(localStorage.getItem(element.name));
+                let product = new Product(jsonProduct.name, jsonProduct.price, jsonProduct.image, jsonProduct.description, jsonProduct.amount);
+                let cart = new Cart();
+                cart.addItem(product);
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+            })
+        })
+
     }
 
     static delete(name) {
@@ -97,17 +129,23 @@ class Cart {
     }
 
     addItem(product) {
-        if(this.items.find(element => element.name === product.name)){
+        let item = this.items.find((element => element.name === product.name));
+        if(item){
         }
-        this.items = [...this.items, product];
+        else {
+            this.items = [...this.items, product];
+        }
         this.save();
     }
 
     viewCart() {
         let cartBody = document.getElementById('cartBody');
+        cartBody.innerHTML = "";
         this.items.forEach(function (element) {
-            cartBody.innerHTML += `<div class="card mb-3" style="max-width: 540px;">
-                            <div class="row g-0">
+            const item = document.createElement("div");
+            item.setAttribute('class', 'card mb-3');
+            item.style.maxWidth = "540px";
+            item.innerHTML = `<div class="row g-0">
                                 <div class="col-md-4">
                                     <img src="images/${element.image}" class="img-fluid rounded-start" alt="chocolate">
                                 </div>
@@ -126,24 +164,22 @@ class Cart {
                                 </div>
                              </div>
                             </div>
-                            </div>
                             </div>`
-
-            document.querySelector('.deleteCart').addEventListener('click', () => {
-                console.log('Delete item from cart');
-                // let cart = new Cart();
-                // cart.deleteItem(this.name);
-                // cart.viewCart();
+            cartBody.appendChild(item);
+        })
+        let delButtons = document.querySelectorAll('.deleteCart');
+        let cart = this;
+        delButtons.forEach( (element) => {
+            element.addEventListener('click', () => {
+                cart.deleteItem(element.name);
+                cart.viewCart();
             })
         })
-
     }
 
     deleteItem(productName) {
-        console.log(this.items);
-        // this.items = this.items.filter((p) => p.name === productName);
-        console.log(this.items);
-        // this.save();
+        this.items = this.items.filter((p) => p.name !== productName);
+        this.save();
     }
 }
 
@@ -153,7 +189,8 @@ document.querySelector('.delete').addEventListener('click', function () {
     Product.delete(this.name);
 });
 document.getElementById('cart').addEventListener('click', function () {
-    if (localStorage.getItem('cart') === null) {
+    if (localStorage.getItem('cart') === null ||
+        localStorage.getItem('cart').length === 2) {
         document.getElementById('cartBody').innerHTML = '<p>Your cart is empty</p>'
     } else {
         let cart = new Cart();
@@ -163,31 +200,6 @@ document.getElementById('cart').addEventListener('click', function () {
 
 
 
-// $(document).on('click', '.cart', function () {
-//     let jsonProduct = JSON.parse(localStorage.getItem(this.name));
-//     let product = new Product(jsonProduct.name, jsonProduct.price, jsonProduct.image, jsonProduct.description, jsonProduct.amount);
-//     let cart = new Cart();
-//     cart.addItem(product);
-//
-//     localStorage.setItem('cart', JSON.stringify(cart));
-// })
-//
-// $(document).on('click', '.update', function () {
-//     let product = JSON.parse(localStorage.getItem(this.name));
-//     document.getElementById('name').value = product.name;
-//     document.getElementById('price').value = product.price;
-//     document.getElementById('description').value = product.description;
-//     document.getElementById('image').value = product.image;
-//     document.getElementById('amount').value = product.amount;
-//     $(document).on('click', '#update', function () {
-//         product.name = document.getElementById('name').value;
-//         product.price = document.getElementById('price').value;
-//         product.description = document.getElementById('description').value;
-//         product.image = document.getElementById('image').value;
-//         product.amount = document.getElementById('amount').value;
-//         localStorage.setItem(product.name, JSON.stringify(product));
-//         location.reload();
-//     })
-// })
+
 
 
