@@ -67,6 +67,7 @@ class Product {
     static read() {
         let items = Storage.getItem( constants.PRODUCT_STORAGE_KEY);
         let product = '';
+        items ?
         items.forEach((item) => {
             product += `<div class="card" style="width: 18rem;">
                             <img src="images/${item.image}" alt="chocolate" class="img-responsive product img-fluid">
@@ -85,7 +86,7 @@ class Product {
                                 </div>
                             </div>
                         </div>`;
-        })
+        }) : product = `<p>No products</p>`;
 
         document.getElementById('products').innerHTML = product;
         const updateButtons = document.querySelectorAll('.update');
